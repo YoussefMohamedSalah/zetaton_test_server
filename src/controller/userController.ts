@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from "express";
+import { Request, Response } from "express";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, doc, getDocs, getFirestore, query, where, documentId, updateDoc, deleteDoc } from "firebase/firestore";
 import config from "../config/firebase.config"

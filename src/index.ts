@@ -3,6 +3,8 @@ import Cors from 'cors';
 import dotenv from 'dotenv';
 import { UserRouter } from './routes/User';
 import { UploadRouter } from './routes/Upload';
+import { AuthRouter } from './routes/Auth';
+
 
 const app = express();
 // Middleware
@@ -18,6 +20,7 @@ try {
 	// Routes
 	app.use('/upload', UploadRouter);
 	app.use('/user', UserRouter);
+	app.use('/auth', AuthRouter);
 
 } catch (error) {
 	console.error(error);
