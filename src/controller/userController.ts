@@ -10,14 +10,14 @@ const app = initializeApp(config.firebaseConfig);
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 
-// Get reference to employee collection
+// Get reference to user collection
 const usersRef = collection(db, "users");
 
 //Add new User
 export const addUser = async (req: Request, res: Response) => {
     try {
-        const employee = pick(req.body, ['name', 'age', 'position', 'isPermanent']);
-        const docRef = await addDoc(usersRef, employee);
+        const user = pick(req.body, ['name', 'age', 'position', 'isPermanent']);
+        const docRef = await addDoc(usersRef, user);
         console.log("Document written with ID: ", docRef.id);
         return res.send('New user added to DB.')
     } catch (e) {
