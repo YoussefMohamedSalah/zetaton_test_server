@@ -3,9 +3,11 @@ import { addDoc, collection, doc, getDocs, getFirestore, query, where, documentI
 import config from "../config/firebase.config"
 import admin from "firebase-admin";
 import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // Initialize Firebase
-initializeApp(config.firebaseConfig);
+const app = initializeApp(config.firebaseConfig);
+const auth = getAuth(app);
 
 
 export const signUp = async (req: Request, res: Response) => {
@@ -25,6 +27,9 @@ export const signUp = async (req: Request, res: Response) => {
 };
 
 export const signIn = async (req: Request, res: Response) => {
-
-    return;
+    const { email, password } = req.body;
+    console.log(req.body)
+    if (!email || !password) return res.status(400).send("Missing fields");
+    const userResponse = await signInWithEmailAndPassword(auth, email, password);
+    return res.json(userResponse)
 };
