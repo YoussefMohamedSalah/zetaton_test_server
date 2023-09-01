@@ -39,7 +39,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
     } catch (err) {
         res.status(400).send(err.message);
     }
-    return res.send('All users records fetched.')
+    return;
 }
 
 // Get user by Id
@@ -61,7 +61,7 @@ export const getUserById = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).send(error.message)
     }
-    return res.send('User record fetched.')
+    return;
 }
 
 // edit User records 
@@ -80,7 +80,7 @@ export const updateUser = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).send(error.message)
     }
-    return res.send('User record updated.')
+    return;
 }
 
 // Delete User records 
@@ -97,6 +97,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(400).send(error.message)
     }
-    return res.send('User record deleted.')
+    return;
 }
 
