@@ -4,6 +4,8 @@ import { getStorage, ref, getDownloadURL, uploadBytesResumable } from 'firebase/
 import config from '../config/firebase.config';
 import { giveCurrentDateTime } from '../utils/currentDateTime';
 import { shortenLink } from '../utils/linkShortener';
+
+
 //Initialize a firebase application
 initializeApp(config.firebaseConfig);
 
@@ -12,12 +14,12 @@ const storage = getStorage();
 
 
 export const uploadPhoto = async (req: Request, res: Response) => {
+	// Check if there is a file in the request
 	if (!req.file) return res.status(400).send('No files were uploaded.');
 	try {
+		// Create a storage reference
 		const dateTime = giveCurrentDateTime();
-
 		const storageRef = ref(storage, `files/${req.file.originalname + "       " + dateTime}`);
-
 		// Create file metadata including the content type
 		const metadata = {
 			contentType: req.file.mimetype!,
@@ -48,6 +50,7 @@ export const uploadPhoto = async (req: Request, res: Response) => {
 				shortDownloadUrl: shortDownloadUrl
 			})
 		}
+
 
 	} catch (error) {
 		return res.status(400).send(error.message)

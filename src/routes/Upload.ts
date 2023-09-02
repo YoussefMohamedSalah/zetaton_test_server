@@ -7,8 +7,8 @@ import { checkAuth } from "../middleware/checkAuth";
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
-        fileSize: 10 * 1024 * 1024, // No larger than 10mb
-        fieldSize: 10 * 1024 * 1024, // No larger than 10mb
+        fileSize: 5 * 1024 * 1024, // No larger than 5mb
+        fieldSize: 5 * 1024 * 1024, // No larger than 5mb
     },
 });
 const router = Router();
