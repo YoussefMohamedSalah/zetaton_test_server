@@ -1,18 +1,18 @@
-import { Request, Response } from "express";
-import { initializeApp } from "firebase/app";
-import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import config from "../config/firebase.config"
-import { giveCurrentDateTime } from "../utils/currentDateTime";
-import { shortenLink } from "../utils/linkShortener";
-
+import express, { Request, Response } from 'express';
+import { initializeApp } from 'firebase/app';
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import config from '../config/firebase.config';
+import { giveCurrentDateTime } from '../utils/currentDateTime';
+import { shortenLink } from '../utils/linkShortener';
 //Initialize a firebase application
 initializeApp(config.firebaseConfig);
 
 // Initialize Cloud Storage and get a reference to the service
 const storage = getStorage();
 
+
 export const uploadPhoto = async (req: Request, res: Response) => {
-	if (!req.file) return;
+	if (!req.file) return res.status(400).send('No files were uploaded.');
 	try {
 		const dateTime = giveCurrentDateTime();
 
@@ -20,11 +20,11 @@ export const uploadPhoto = async (req: Request, res: Response) => {
 
 		// Create file metadata including the content type
 		const metadata = {
-			contentType: req.file.mimetype,
+			contentType: req.file.mimetype!,
 		};
 
 		// Upload the file in the bucket storage
-		const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+		const snapshot = await uploadBytesResumable(storageRef, req.file.buffer!, metadata);
 		//by using uploadBytesResumable we can control the progress of uploading like pause, resume, cancel
 
 		// Grab the public url
@@ -32,7 +32,7 @@ export const uploadPhoto = async (req: Request, res: Response) => {
 		const shortDownloadUrl = await shortenLink(downloadURL);
 		console.log('File successfully uploaded.');
 
-		if (shortDownloadUrl instanceof Error || null) {
+		if (shortDownloadUrl instanceof Error || shortDownloadUrl === null) {
 			return res.send({
 				message: 'file uploaded to firebase storage',
 				name: req.file.originalname,
@@ -53,3 +53,14 @@ export const uploadPhoto = async (req: Request, res: Response) => {
 		return res.status(400).send(error.message)
 	}
 };
+
+export const getImageDownloadUrl = async (req: Request, res: Response) => {
+	try {
+		// Create a reference from a Google Cloud Storage URI
+		const gsReference = ref(storage, req.params.name);
+		const url = await getDownloadURL(gsReference);
+		return res.send(url);
+	} catch (error) {
+		return res.status(400).send(error.message)
+	}
+}
